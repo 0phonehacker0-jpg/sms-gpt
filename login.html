@@ -1,0 +1,152 @@
+<!DOCTYPE html><html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورود مدیر | SMS GPT</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #090909;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 390px;
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 18px;
+    padding: 35px 25px;
+    text-align: center;
+    box-shadow: 0 0 35px #ff263f12;
+}
+
+.logo {
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.logo span {
+    color: #ff263f;
+}
+
+.subtitle {
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    background: #090909;
+    border: 1px solid #333;
+    border-radius: 9px;
+    padding: 14px;
+    color: white;
+    outline: none;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 15px;
+}
+
+input:focus {
+    border-color: #ff263f;
+}
+
+button {
+    width: 100%;
+    background: #ff263f;
+    border: none;
+    padding: 13px;
+    color: white;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+#error {
+    color: #ff5265;
+    font-size: 12px;
+    margin-top: 15px;
+    min-height: 20px;
+}
+
+.footer {
+    color: #555;
+    font-size: 11px;
+    margin-top: 30px;
+}
+</style></head><body><div class="login-box"><div class="logo">SMS <span>GPT</span></div>
+<div class="subtitle">سیستم هوشمند مدیریت پیامکی</div>
+
+<h2>ورود مدیر</h2>
+<div class="description">
+    برای ورود به پنل مدیریت، رمز عبور را وارد کنید.
+</div>
+
+<input
+    type="password"
+    id="password"
+    placeholder="رمز عبور مدیر"
+    onkeydown="if(event.key==='Enter') login()"
+>
+
+<button onclick="login()">ورود به پنل</button>
+
+<div id="error"></div>
+
+<div class="footer">
+    SMS GPT © 2026
+    <br><br>
+    دسترسی ویژه مدیران
+</div>
+
+</div><script>
+function login() {
+
+    const password = document.getElementById("password").value;
+    const error = document.getElementById("error");
+
+    // رمز آزمایشی؛ برای نسخه واقعی باید احراز هویت سروری بسازیم.
+    if (password === "1234") {
+
+        sessionStorage.setItem("smsAdminDemo", "true");
+
+        window.location.href = "admin.html";
+
+    } else {
+
+        error.textContent = "رمز عبور اشتباه است!";
+
+    }
+}
+</script></body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل مدیریت | SMS GPT</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --red: #ff263f;
+    --bg: #090909;
+    --card: #151515;
+    --border: #292929;
+    --text: #fff;
+    --muted: #999;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Vazirmatn', sans-serif;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+}
+
+header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.logo span {
+    color: var(--red);
+}
+
+.badge {
+    background: #261015;
+    color: var(--red);
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px 16px;
+}
+
+h2 {
+    margin-top: 10px;
+    font-size: 23px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 25px 0;
+}
+
+.stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 13px;
+}
+
+.stat p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 13px;
+}
+
+.stat h3 {
+    font-size: 25px;
+    margin: 10px 0 0;
+    color: var(--red);
+}
+
+.panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.panel-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+input, select {
+    width: 100%;
+    background: #090909;
+    border: 1px solid var(--border);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+input:focus, select:focus {
+    border-color: var(--red);
+}
+
+button {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.primary {
+    background: var(--red);
+    color: white;
+    width: 100%;
+}
+
+.danger {
+    background: #361016;
+    color: #ff5365;
+}
+
+.success {
+    background: #123324;
+    color: #47df91;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th, td {
+    padding: 13px 10px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+th {
+    color: var(--muted);
+}
+
+.status {
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+}
+
+.active {
+    background: #123324;
+    color: #47df91;
+}
+
+.inactive {
+    background: #361016;
+    color: #ff5365;
+}
+
+footer {
+    text-align: center;
+    color: #666;
+    padding: 25px;
+    font-size: 12px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000b;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 400px;
+    background: #181818;
+    border: 1px solid var(--border);
+    padding: 22px;
+    border-radius: 14px;
+}
+
+.close {
+    background: #333;
+    color: white;
+    margin-top: 8px;
+    width: 100%;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">SMS <span>GPT</span></div>
+    <div class="badge">پنل مدیریت آزمایشی</div>
+</header>
+
+<div class="container">
+
+    <h2>داشبورد مدیریت</h2>
+    <p class="subtitle">مدیریت کاربران و اشتراک‌های SMS GPT</p>
+
+    <div class="stats">
+        <div class="stat">
+            <p>کل کاربران</p>
+            <h3 id="totalUsers">0</h3>
+        </div>
+
+        <div class="stat">
+            <p>کاربران فعال</p>
+            <h3 id="activeUsers">0</h3>
+        </div>
+
+        <div class="stat">
+            <p>کاربران غیرفعال</p>
+            <h3 id="inactiveUsers">0</h3>
+        </div>
+
+        <div class="stat">
+            <p>مجموع پیامک‌ها</p>
+            <h3 id="totalSms">0</h3>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">افزودن کاربر جدید</div>
+
+        <input id="name" placeholder="نام کاربر">
+        <input id="phone" placeholder="شماره موبایل">
+
+        <select id="plan">
+            <option value="1">اشتراک ۱ ماهه</option>
+            <option value="3">اشتراک ۳ ماهه</option>
+            <option value="6">اشتراک ۶ ماهه</option>
+            <option value="12">اشتراک ۱ ساله</option>
+            <option value="24">اشتراک ۲ ساله</option>
+        </select>
+
+        <button class="primary" onclick="addUser()">افزودن کاربر</button>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">مدیریت کاربران</div>
+
+        <input id="search" placeholder="جست‌وجو با نام یا شماره..." oninput="renderUsers()">
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>نام</th>
+                        <th>شماره</th>
+                        <th>اشتراک</th>
+                        <th>پایان اشتراک</th>
+                        <th>پیامک</th>
+                        <th>وضعیت</th>
+                        <th>مدیریت</th>
+                    </tr>
+                </thead>
+                <tbody id="userList"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <div class="panel-title">تغییر اشتراک کاربر</div>
+
+        <input type="hidden" id="editId">
+
+        <select id="newPlan">
+            <option value="1">۱ ماهه</option>
+            <option value="3">۳ ماهه</option>
+            <option value="6">۶ ماهه</option>
+            <option value="12">۱ ساله</option>
+            <option value="24">۲ ساله</option>
+        </select>
+
+        <button class="primary" onclick="changePlan()">ذخیره تغییرات</button>
+        <button class="close" onclick="closeModal()">بازگشت</button>
+    </div>
+</div>
+
+<footer>
+    SMS GPT © 2026 | پنل مدیریت
+</footer>
+
+<script>
+
+let users = JSON.parse(localStorage.getItem("smsUsers")) || [
+    {
+        id: 1,
+        name: "کاربر آزمایشی",
+        phone: "09120000000",
+        plan: 3,
+        expiry: "2027-02-14",
+        sms: 125,
+        active: true
+    },
+    {
+        id: 2,
+        name: "کاربر دوم",
+        phone: "09121111111",
+        plan: 1,
+        expiry: "2026-12-14",
+        sms: 48,
+        active: false
+    }
+];
+
+function save() {
+    localStorage.setItem("smsUsers", JSON.stringify(users));
+}
+
+function addUser() {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const plan = Number(document.getElementById("plan").value);
+
+    if (!name || !phone) {
+        alert("لطفاً نام و شماره را وارد کنید.");
+        return;
+    }
+
+    if (!/^09\d{9}$/.test(phone)) {
+        alert("شماره موبایل باید ۱۱ رقم و با 09 شروع شود.");
+        return;
+    }
+
+    if (users.some(u => u.phone === phone)) {
+        alert("این شماره قبلاً ثبت شده است.");
+        return;
+    }
+
+    const expiry = new Date();
+    expiry.setMonth(expiry.getMonth() + plan);
+
+    users.push({
+        id: Date.now(),
+        name,
+        phone,
+        plan,
+        expiry: expiry.toISOString().slice(0, 10),
+        sms: 0,
+        active: true
+    });
+
+    save();
+    renderUsers();
+
+    document.getElementById("name").value = "";
+    document.getElementById("phone").value = "";
+
+    alert("کاربر با موفقیت اضافه شد.");
+}
+
+function toggleUser(id) {
+    users = users.map(u => {
+        if (u.id === id) u.active = !u.active;
+        return u;
+    });
+
+    save();
+    renderUsers();
+}
+
+function openModal(id) {
+    document.getElementById("editId").value = id;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function changePlan() {
+    const id = Number(document.getElementById("editId").value);
+    const plan = Number(document.getElementById("newPlan").value);
+
+    const expiry = new Date();
+    expiry.setMonth(expiry.getMonth() + plan);
+
+    users = users.map(u => {
+        if (u.id === id) {
+            u.plan = plan;
+            u.expiry = expiry.toISOString().slice(0, 10);
+            u.active = true;
+        }
+        return u;
+    });
+
+    save();
+    renderUsers();
+    closeModal();
+
+    alert("اشتراک کاربر تغییر کرد.");
+}
+
+function renderUsers() {
+    const search = document.getElementById("search").value.trim();
+    const list = document.getElementById("userList");
+
+    const filtered = users.filter(u =>
+        u.name.includes(search) || u.phone.includes(search)
+    );
+
+    list.innerHTML = "";
+
+    filtered.forEach(u => {
+        const row = document.createElement("tr");
+
+        const values = [
+            u.name,
+            u.phone,
+            u.plan + " ماهه",
+            u.expiry,
+            u.sms,
+            u.active ? "فعال" : "غیرفعال"
+        ];
+
+        values.forEach((value, index) => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+
+            if (index === 5) {
+                const badge = document.createElement("span");
+                badge.className = "status " + (u.active ? "active" : "inactive");
+                badge.textContent = value;
+                cell.textContent = "";
+                cell.appendChild(badge);
+            }
+
+            row.appendChild(cell);
+        });
+
+        const actions = document.createElement("td");
+
+        const toggle = document.createElement("button");
+        toggle.className = u.active ? "danger" : "success";
+        toggle.textContent = u.active ? "غیرفعال‌سازی" : "فعال‌سازی";
+        toggle.onclick = () => toggleUser(u.id);
+
+        const edit = document.createElement("button");
+        edit.className = "success";
+        edit.textContent = "اشتراک";
+        edit.style.marginRight = "5px";
+        edit.onclick = () => openModal(u.id);
+
+        actions.appendChild(toggle);
+        actions.appendChild(edit);
+        row.appendChild(actions);
+
+        list.appendChild(row);
+    });
+
+    document.getElementById("totalUsers").textContent = users.length;
+    document.getElementById("activeUsers").textContent =
+        users.filter(u => u.active).length;
+    document.getElementById("inactiveUsers").textContent =
+        users.filter(u => !u.active).length;
+    document.getElementById("totalSms").textContent =
+        users.reduce((sum, u) => sum + u.sms, 0);
+}
+
+save();
+renderUsers();
+
+</script>
+
+</body>
+</html>
